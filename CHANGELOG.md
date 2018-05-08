@@ -3,7 +3,8 @@
 ## 2018-05-07
 - at more columns to device list (visible if 'show more' selected) 
   - Topic and GroupTopic of the device (MQTT)
-  - OtaUrl (if case happens that device specific implementation)  
+  - OtaUrl (if case happens that device specific implementation)
+- Change Device Settings SSId for 5.13.1 (the AP is now visible)
    
 ## 2018-05-06
 - add distance sensor data (#89)
