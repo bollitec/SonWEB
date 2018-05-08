@@ -1,10 +1,9 @@
-
 body {
 	min-height  : 100vh;
 	position    : relative;
 	margin      : 0;
 	font-size   : 1rem;
-	line-height : 1.2;
+	line-height : 1.2rem;
 }
 
 footer {
@@ -188,7 +187,7 @@ td.runtime {
 
 .box_device img {
 	max-width  : 100%;
-	padding    : 10px 10px 40px;
+	padding    : 10px 10px 35px;
 	box-sizing : border-box;
 	height     : auto;
 }
@@ -204,48 +203,89 @@ td.runtime {
 	padding          : 3px 2px;
 	box-sizing       : border-box;
 	font-size        : 0.8rem;
-	line-height      : 1;
+	line-height      : 1rem;
 	max-height       : 2.3rem;
 	overflow         : hidden;
 }
 
+.box_device .info-holder {
+	position : absolute;
+	width    : 100%;
+	height   : 100%;
+}
+
 .box_device .info {
-	position         : absolute;
+	position         : relative;
 	padding          : 3px;
 	background-color : rgba(0, 148, 204, 0.8);
 	color            : #FFFFFF;
 	text-shadow      : #FFFFFF 0px 0px 10px;
 	font-size        : 0.8rem;
-	line-height      : 0.8;
-	max-height       : 2.3rem;
+	line-height      : 0.9rem;
 	overflow         : hidden;
 }
 
+@media all and (min-width : 1200px) {
+	.box_device .info {
+		font-size : 0.5rem;
+	}
+}
+
+@media all and (min-width : 1351px) {
+	.box_device .info {
+		font-size : 0.6rem;
+	}
+}
+
+@media all and (min-width : 1471px) {
+	.box_device .info {
+		font-size : 0.8rem;
+	}
+}
+
 .box_device .info-1 {
-	top  : 0px;
-	left : 0px;
+	top   : 0px;
+	left  : 0px;
+	float : left;
 }
 
 .box_device .info-2 {
 	top   : 0px;
 	right : 0px;
+	float : right;
 }
 
 .box_device .info-3 {
-	top  : 20px;
-	left : 0px;
+	top   : 10px;
+	left  : 0px;
+	float : left;
+	clear : both;
 }
 
 .box_device .info-4 {
+	top   : 10px;
+	right : 0px;
+	float : right;
+}
+
+.box_device .info-5 {
+	top   : 20px;
+	left  : 0px;
+	float : left;
+	clear : both;
+}
+
+.box_device .info-6 {
 	top   : 20px;
 	right : 0px;
+	float : right;
 }
 
 #progressbox span {
 	width       : 100%;
 	display     : block;
 	font-size   : 0.8rem;
-	line-height : 1;
+	line-height : 1rem;
 }
 
 #progressbox span.error {
@@ -289,6 +329,14 @@ hr {
 
 .nightmode .box_device {
 	border-color : #284681;
+}
+
+.nightmode .box_device.error {
+	border-color : #77010F;
+}
+
+.nightmode .box_device .info {
+	background-color : rgba(0, 148, 204, 0.4);
 }
 
 .nightmode .form-switch i::before {

@@ -39,7 +39,7 @@ $( document ).on( "ready", function () {
 		setInterval( function () {
 			console.log( "[Global][Refreshtime] updateStatus now" );
 			//updateStatus();
-			updateAllStatus();
+			updateStatus();
 		}, refreshtime );
 	} else {
 		console.log( "[Global][Refreshtime] " + $.i18n( 'NO_REFRESH' ) + "" );
@@ -70,11 +70,11 @@ function updateStatus() {
 				     && !data.ERROR
 				     && !data.WARNING
 				     && data
-				        !== ""
+				     !== ""
 				     && data
-				        !== undefined
+				     !== undefined
 				     && data.statusText
-				        === undefined ) {
+				     === undefined ) {
 					//console.log( "DATA => " + JSON.stringify( data ) );
 					if ( device_group === "multi" ) {
 						$( '#device-list tbody tr[data-device_group="multi"][data-device_ip="' + device_ip + '"]' )
@@ -99,20 +99,30 @@ function updateStatus() {
 								$( grouptr )
 									.find( ".status" )
 									.find( "input" )
-									.removeProp( "checked" )
+									//.removeProp( "checked" )
 									.parent()
 									.addClass( "error" );
-								$( grouptr ).find( ".rssi span" ).html( $.i18n( 'ERROR' ) );
-								$( grouptr ).find( ".runtime span" ).html( $.i18n( 'ERROR' ) );
-								$( grouptr ).find( ".version span" ).html( $.i18n( 'ERROR' ) );
+								//$( grouptr ).find( ".rssi span" ).html( $.i18n( 'ERROR' ) );
+								//$( grouptr ).find( ".runtime span" ).html( $.i18n( 'ERROR' ) );
+								//$( grouptr ).find( ".version span" ).html( $.i18n( 'ERROR' ) );
+								
+								$( grouptr ).find( "td" ).each( function ( key, td ) {
+									//console.log( td );
+									if ( td.find( ".loader" ) ) {
+										td.find( "span" ).html( "-" );
+									}
+								} );
+								
 								$( grouptr ).removeClass( "updating" );
 							} );
 					} else {
 						
-						$( tr ).find( ".status" ).find( "input" ).removeProp( "checked" ).parent().addClass( "error" );
-						$( tr ).find( ".rssi span" ).html( $.i18n( 'ERROR' ) );
-						$( tr ).find( ".runtime span" ).html( $.i18n( 'ERROR' ) );
-						$( tr ).find( ".version span" ).html( $.i18n( 'ERROR' ) );
+						$( tr ).find( ".status" ).find( "input" )
+						//.removeProp( "checked" )
+						       .parent().addClass( "error" );
+						//$( tr ).find( ".rssi span" ).html( $.i18n( 'ERROR' ) );
+						//$( tr ).find( ".runtime span" ).html( $.i18n( 'ERROR' ) );
+						//$( tr ).find( ".version span" ).html( $.i18n( 'ERROR' ) );
 						$( tr ).removeClass( "updating" );
 					}
 				}
@@ -138,24 +148,24 @@ function updateAllStatus() {
 		
 		console.log( "[Devices][updateAllStatus]START" );
 		
-		var timeout = device_holder.find( 'tbody tr' ).length * 8 + 2; //max 10 sec per device
+		var timeout = device_holder.find( 'tbody tr' ).length * 15; //max 12 sec per device
 		
 		Sonoff.getAllStatus( timeout, function ( result ) {
 			                     device_holder.find( 'tbody tr' ).each( function ( key, tr ) {
 				                     var device_id     = $( tr ).data( "device_id" );
 				                     var device_relais = $( tr ).data( "device_relais" );
 				                     var device_group  = $( tr ).data( "device_group" );
-				                     var data          = result[ device_id ] || {};
-				
+				                     var data          = result[ device_id ] || undefined;
 				                     if ( data !== undefined
+				                          && !$.isEmptyObject( data )
 				                          && !data.ERROR
 				                          && !data.WARNING
 				                          && data
-				                             !== ""
+				                          !== ""
 				                          && data
-				                             !== undefined
+				                          !== undefined
 				                          && data.statusText
-				                             === undefined ) {
+				                          === undefined ) {
 					                     console.log( "[LIST][updateAllStatus][" + device_id + "]MSG => " + JSON.stringify( data ) );
 					
 					                     var device_status = data.StatusSTS.POWER || eval( "data.StatusSTS.POWER" + device_relais );
@@ -165,6 +175,7 @@ function updateAllStatus() {
 					                     ).removeAttr( "data-toggle" );
 					
 					                     updateRow( $( tr ), data, device_status );
+					                     $( tr ).find( ".status" ).find( "input" ).parent().removeClass( "error" );
 				                     } else {
 					                     console.log( "[LIST][updateAllStatus]["
 					                                  + device_id
@@ -175,17 +186,23 @@ function updateAllStatus() {
 					                     if ( $( tr ).hasClass( "toggled" ) ) {
 						                     $( tr ).removeClass( "toggled" );
 					                     } else {
-						                     $( tr ).find( ".status" ).find( "input" ).removeProp( "checked" ).parent().addClass( "error" );
+						                     $( tr ).find( ".status" ).find( "input" )
+						                     //.removeProp( "checked" )
+						                            .parent().addClass( "error" );
 					                     }
 					
 					                     var msg = $.i18n( 'ERROR' );
-					                     if ( data.ERROR !== undefined ) {
-						                     msg = data.ERROR;
-					                     } else if ( data.WARNING !== undefined ) {
-						                     msg = data.WARNING;
-					                     }
-					                     else if ( data.statusText !== undefined ) {
-						                     msg = data.statusText;
+					                     if ( data !== undefined ) {
+						                     if ( data.ERROR !== undefined ) {
+							                     msg = data.ERROR;
+						                     } else if ( data.WARNING !== undefined ) {
+							                     msg = data.WARNING;
+						                     }
+						                     else if ( data.statusText !== undefined ) {
+							                     msg = data.statusText;
+						                     }
+					                     } else {
+						                     msg = "data is empty";
 					                     }
 					
 					                     $( tr ).attr(
@@ -196,10 +213,15 @@ function updateAllStatus() {
 						                                                                 delay: 700,
 					                                                                 } );
 					
-					                     $( tr ).find( ".rssi span" ).html( $.i18n( 'ERROR' ) );
-					                     $( tr ).find( ".runtime span" ).html( "-" );
-					                     $( tr ).find( ".version span" ).html( "-" );
-					                     $( tr ).find( "td.more:not(.static) span" ).html( "-" );
+					                     //$( tr ).find( ".rssi span" ).html( $.i18n( 'ERROR' ) );
+					                     //$( tr ).find( ".runtime span" ).html( "-" );
+					                     //$( tr ).find( ".version span" ).html( "-" );
+					                     //$( tr ).find( "td.more:not(.static) span" ).html( "-" );
+					                     $( tr ).find( "td" ).each( function ( key, td ) {
+						                     if ( $( td ).find( ".loader" ).length > 0 ) {
+							                     $( td ).find( "span" ).html( "-" );
+						                     }
+					                     } );
 				                     }
 				
 				
@@ -242,7 +264,9 @@ function deviceTools() {
 				//	statusField.find( "input" ).removeProp( "checked" );
 				//}
 			} else {
-				statusField.find( "input" ).removeProp( "checked" ).parent().addClass( "error" );
+				statusField.find( "input" )
+				           //.removeProp( "checked" )
+				           .parent().addClass( "error" );
 			}
 		} );
 		
@@ -375,6 +399,13 @@ function updateRow( row, data, device_status ) {
 		$( "#device-list .pressure" ).removeClass( "hidden" );
 	}
 	
+	var distance = getDistance( data );
+	
+	if ( distance != "" ) {
+		$( row ).find( ".distance span" ).html( distance );
+		$( "#device-list .distance" ).removeClass( "hidden" );
+	}
+	
 	var idx = (
 		data.idx ? data.idx : ""
 	);
@@ -404,24 +435,27 @@ function updateRow( row, data, device_status ) {
 	
 	var startup = (
 		(
-			data.StatusPRM.StartupDateTimeUtc != undefined
-				? data.StatusPRM.StartupDateTimeUtc
-				: (
-				data.StatusPRM.StartupUTC != undefined
-					? data.StatusPRM.StartupUTC
-					: ""
+			data.StatusPRM.StartupDateTimeUtc !== undefined
+			? data.StatusPRM.StartupDateTimeUtc
+			: (
+				data.StatusPRM.StartupUTC !== undefined
+				? data.StatusPRM.StartupUTC
+				: ""
 			)
 		)
 	);
-	console.log( startup );
+	//console.log( startup );
 	if ( startup !== "" ) {
 		
-		var startupdatetime = startup.replace( 'T', ' ' );
-		console.log( startupdatetime );
-		startupdatetime = new Date( startupdatetime );
-		startupdatetime.setTime( startupdatetime.getTime() + (
-			startupdatetime.getTimezoneOffset()
-		) * -1 * 60 * 1000 );
+		//var startupdatetime = startup.replace( 'T', ' ' );
+		var startupdatetime = startup + "Z".replace( /-/g, "/" );
+		//console.log( startupdatetime );
+		startupdatetime     = new Date( startupdatetime );
+		//console.log( startupdatetime );
+		//startupdatetime.setTime( startupdatetime.getTime() + (
+		//	startupdatetime.getTimezoneOffset()
+		//) * -1 * 60 * 1000 );
+		//console.log( startupdatetime );
 		var now     = new Date();
 		var sec_num = (
 			              now - startupdatetime
@@ -468,9 +502,9 @@ function updateRow( row, data, device_status ) {
 			            !== 0
 			         || hours
 			            !== 0
-				         ? seconds
-				 + $.i18n( 'UPTIME_SHORT_SEC' )
-				         : "-"
+			         ? seconds
+			     + $.i18n( 'UPTIME_SHORT_SEC' )
+			         : "-"
 		         );
 		
 		uptime = $.trim( uptime );
@@ -496,10 +530,27 @@ function updateRow( row, data, device_status ) {
 	if ( !$( row ).find( ".hostname span" ).hasClass( "dont-update" ) ) {
 		$( row ).find( ".hostname span" ).html( data.StatusNET.Hostname
 		                                        !== undefined
-			                                        ? data.StatusNET.Hostname
-			                                        : "?" );
+		                                        ? data.StatusNET.Hostname
+		                                        : "?" );
 	}
-	
+	if ( !$( row ).find( ".topic span" ).hasClass( "dont-update" ) ) {
+		$( row ).find( ".topic span" ).html( data.Status.Topic
+		                                        !== undefined
+		                                        ? data.Status.Topic
+		                                        : "?" );
+	}
+	if ( !$( row ).find( ".grouptopic span" ).hasClass( "dont-update" ) ) {
+		$( row ).find( ".grouptopic span" ).html( data.StatusPRM.GroupTopic
+		                                        !== undefined
+		                                        ? data.StatusPRM.GroupTopic
+		                                        : "?" );
+	}
+	if ( !$( row ).find( ".otaurl span" ).hasClass( "dont-update" ) ) {
+		$( row ).find( ".otaurl span" ).html( data.StatusPRM.OtaUrl
+		                                        !== undefined
+		                                        ? data.StatusPRM.OtaUrl
+		                                        : "?" );
+	}
 	if ( !$( row ).find( ".mac span" ).hasClass( "dont-update" ) ) {
 		$( row ).find( ".mac span" ).html( data.StatusNET.Mac !== undefined ? data.StatusNET.Mac : "?" );
 	}
@@ -511,8 +562,8 @@ function updateRow( row, data, device_status ) {
 	if ( !$( row ).find( ".poweronstate span" ).hasClass( "dont-update" ) ) {
 		$( row ).find( ".poweronstate span" ).html( data.Status.PowerOnState
 		                                            !== undefined
-			                                            ? data.Status.PowerOnState
-			                                            : "?" );
+		                                            ? data.Status.PowerOnState
+		                                            : "?" );
 	}
 	
 	if ( !$( row ).find( ".ledstate span" ).hasClass( "dont-update" ) ) {
@@ -528,20 +579,20 @@ function updateRow( row, data, device_status ) {
 	if ( !$( row ).find( ".sleep span" ).hasClass( "dont-update" ) ) {
 		$( row ).find( ".sleep span" ).html( data.StatusPRM.Sleep
 		                                     !== undefined
-			                                     ? data.StatusPRM.Sleep
-			                                       + "ms"
-			                                     : "?" );
+		                                     ? data.StatusPRM.Sleep
+		                                       + "ms"
+		                                     : "?" );
 	}
 	
 	
 	$( row ).find( ".bootcount span" ).html( data.StatusPRM.BootCount
 	                                         !== undefined
-		                                         ? data.StatusPRM.BootCount
-		                                         : "?" );
+	                                         ? data.StatusPRM.BootCount
+	                                         : "?" );
 	$( row ).find( ".savecount span" ).html( data.StatusPRM.SaveCount
 	                                         !== undefined
-		                                         ? data.StatusPRM.SaveCount
-		                                         : "?" );
+	                                         ? data.StatusPRM.SaveCount
+	                                         : "?" );
 	$( row ).find( ".log span" ).html( (
 		                                   data.StatusLOG.SerialLog !== undefined ? data.StatusLOG.SerialLog : "?"
 	                                   )
@@ -558,8 +609,8 @@ function updateRow( row, data, device_status ) {
 	if ( !$( row ).find( ".wificonfig span" ).hasClass( "dont-update" ) ) {
 		$( row ).find( ".wificonfig span" ).html( data.StatusNET.WifiConfig
 		                                          !== undefined
-			                                          ? data.StatusNET.WifiConfig
-			                                          : "?" );
+		                                          ? data.StatusNET.WifiConfig
+		                                          : "?" );
 	}
 	
 	$( row ).find( ".vcc span" ).html( data.StatusSTS.Vcc !== undefined ? data.StatusSTS.Vcc + "V" : "?" );

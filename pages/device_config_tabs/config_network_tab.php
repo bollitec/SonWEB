@@ -153,8 +153,8 @@
 		       id="SSId1"
 		       name='SSId1'
 		       placeholder="<?php echo __( "PLEASE_ENTER" ); ?>"
-		       value='<?php echo isset( $status->StatusLOG->SSId1 )
-		                         && !empty( $status->StatusLOG->SSId1 ) ? $status->StatusLOG->SSId1 : ""; ?>'
+		       value='<?php echo isset( $status->StatusLOG->SSId[0] )
+		                         && !empty( $status->StatusLOG->SSId[0] ) ? $status->StatusLOG->SSId[0] : ""; ?>'
 		>
 		<small id="SSId1Help" class="form-text text-muted">
 			<?php echo __( "CONFIG_SSID1_HELP", "DEVICE_CONFIG" ); ?>
@@ -184,8 +184,8 @@
 		       id="SSId2"
 		       name='SSId2'
 		       placeholder="<?php echo __( "PLEASE_ENTER" ); ?>"
-		       value='<?php echo isset( $status->StatusLOG->SSId2 )
-		                         && !empty( $status->StatusLOG->SSId2 ) ? $status->StatusLOG->SSId2 : ""; ?>'
+		       value='<?php echo isset( $status->StatusLOG->SSId[1] )
+		                         && !empty( $status->StatusLOG->SSId[1] ) ? $status->StatusLOG->SSId[1] : ""; ?>'
 		>
 		<small id="SSId2Help" class="form-text text-muted">
 			<?php echo __( "CONFIG_SSID2_HELP", "DEVICE_CONFIG" ); ?>

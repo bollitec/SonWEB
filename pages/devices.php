@@ -43,7 +43,11 @@
 					<th class='temp hidden'><?php echo __( "TABLE_HEAD_TEMP", "DEVICES" ); ?></th>
 					<th class='humidity hidden'><?php echo __( "TABLE_HEAD_HUMIDITY", "DEVICES" ); ?></th>
 					<th class='pressure hidden'><?php echo __( "TABLE_HEAD_PRESSURE", "DEVICES" ); ?></th>
+					<th class='pressure hidden'><?php echo __( "TABLE_HEAD_DISTANCE", "DEVICES" ); ?></th>
 					<th class='more'><?php echo __( "HOSTNAME", "DEVICES" ); ?></th>
+					<th class='more'><?php echo __( "TOPIC", "DEVICES" ); ?></th>
+					<th class='more'><?php echo __( "GROUPTOPIC", "DEVICES" ); ?></th>
+					<th class='more'><?php echo __( "OTAURL", "DEVICES" ); ?></th>
 					<th class='more'><?php echo __( "MAC", "DEVICES" ); ?></th>
 					<th class='more'><?php echo __( "MQTT", "DEVICES" ); ?></th>
 					<th class='more idx hidden'><?php echo __( "TABLE_HEAD_IDX", "DEVICES" ); ?></th>
@@ -142,7 +146,39 @@
 										-
 									</span>
 									</td>
+									<td class='distance hidden'>
+									<span>
+										-
+									</span>
+									</td>
 									<td class='more hostname dblcEdit' data-cmnd='Hostname'>
+									<span>
+										<div class='loader'>
+											<img src='<?php echo _RESOURCESURL_; ?>img/loading.gif'
+											     alt='<?php echo __( "TEXT_LOADING" ); ?>'
+											     title='<?php echo __( "TEXT_LOADING" ); ?>'>
+										</div>
+									</span>
+									</td>
+									<td class='more topic dblcEdit' data-cmnd='Topic'>
+									<span>
+										<div class='loader'>
+											<img src='<?php echo _RESOURCESURL_; ?>img/loading.gif'
+											     alt='<?php echo __( "TEXT_LOADING" ); ?>'
+											     title='<?php echo __( "TEXT_LOADING" ); ?>'>
+										</div>
+									</span>
+									</td>
+									<td class='more grouptopic dblcEdit' data-cmnd='GroupTopic'>
+									<span>
+										<div class='loader'>
+											<img src='<?php echo _RESOURCESURL_; ?>img/loading.gif'
+											     alt='<?php echo __( "TEXT_LOADING" ); ?>'
+											     title='<?php echo __( "TEXT_LOADING" ); ?>'>
+										</div>
+									</span>
+									</td>
+									<td class='more otaurl dblcEdit' data-cmnd='OtaUrl'>
 									<span>
 										<div class='loader'>
 											<img src='<?php echo _RESOURCESURL_; ?>img/loading.gif'
@@ -160,7 +196,7 @@
 										</div>
 									</span>
 									</td>
-									<td class='more mqtt dblcEdit' data-cmnd='Mqtt'>
+									<td class='more mqtt dblcEdit' data-cmnd='SetOption3'>
 									<span>
 										<div class='loader'>
 											<img src='<?php echo _RESOURCESURL_; ?>img/loading.gif'
@@ -313,6 +349,9 @@
 					<th class='humidity hidden'><?php echo __( "TABLE_HEAD_HUMIDITY", "DEVICES" ); ?></th>
 					<th class='pressure hidden'><?php echo __( "TABLE_HEAD_PRESSURE", "DEVICES" ); ?></th>
 					<th class='more'><?php echo __( "HOSTNAME", "DEVICES" ); ?></th>
+					<th class='more'><?php echo __( "TOPIC", "DEVICES" ); ?></th>
+					<th class='more'><?php echo __( "GROUPTOPIC", "DEVICES" ); ?></th>
+					<th class='more'><?php echo __( "OTAURL", "DEVICES" ); ?></th>
 					<th class='more'><?php echo __( "MAC", "DEVICES" ); ?></th>
 					<th class='more'><?php echo __( "MQTT", "DEVICES" ); ?></th>
 					<th class='more idx hidden'><?php echo __( "TABLE_HEAD_IDX", "DEVICES" ); ?></th>

@@ -7,13 +7,15 @@
 	
 	$otaServer = "http://".$localIP.":".$_SERVER[ "SERVER_PORT" ]._BASEURL_."";
 	
-	$ota_minimal_firmware_url = $otaServer."data/firmwares/sonoff-minimal.bin";
-	$ota_new_firmware_url     = $otaServer."data/firmwares/sonoff-full.bin";
+	if ( isset( $_POST[ 'minimal_firmware_path' ] ) && !empty( $_POST[ 'minimal_firmware_path' ] ) ) {
+		$ota_minimal_firmware_url = $otaServer."data/firmwares/sonoff-minimal.bin";
+	}
+	$ota_new_firmware_url = $otaServer."data/firmwares/sonoff-full.bin";
 	
 	$device_ids = isset( $_POST[ "device_ids" ] ) ? $_POST[ "device_ids" ] : FALSE;
 ?>
 <div class='row justify-content-sm-center'>
-	<div class='col-12 col-md-6 '>
+	<div class='col-12 col-md-8 '>
 		<h2 class='text-sm-center mb-5'>
 			<?php echo $title; ?>
 		</h2>
@@ -33,8 +35,11 @@
 			
 			</div>
 		
-		<input type='hidden' id='ota_minimal_firmware_url' value='<?php echo $ota_minimal_firmware_url; ?>'>
-		<input type='hidden' id='ota_new_firmware_url' value='<?php echo $ota_new_firmware_url; ?>'>
+		<input type='hidden' id='ota_minimal_firmware_url'
+		       value='<?php echo isset( $ota_minimal_firmware_url ) ? $ota_minimal_firmware_url : ""; ?>'>
+		<input type='hidden'
+		       id='ota_new_firmware_url'
+		       value='<?php echo isset( $ota_new_firmware_url ) ? $ota_new_firmware_url : ""; ?>'>
 			
 			
 			<script>
@@ -44,7 +49,7 @@
 			
 			
 			<script type='text/javascript'
-			        src='<?php echo  _RESOURCESURL_; ?>js/device_update.js?<?php echo time(); ?>'></script>
+			        src='<?php echo _RESOURCESURL_; ?>js/device_update.js?<?php echo time(); ?>'></script>
 		<?php endif; ?>
 	</div>
 </div>

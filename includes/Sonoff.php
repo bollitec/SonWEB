@@ -383,8 +383,8 @@
 			);
 			
 			
-			//			if ( $_GET[ "id" ] == 6 ) {
-			//				$url = "http://sonweb/dev/wemos8.json";
+			//			if ( $device->id == 6 ) {
+			//				$url = "http://sonweb/dev/SR04.json";
 			//			}
 			
 			$result = NULL;
@@ -443,26 +443,33 @@
 				);
 				
 				//				if ( $device->id == 6 ) {
-				//					$url = "http://sonweb/dev/wemos8.json";
+				//					$url = "http://sonweb/dev/DS18x20.json";
 				//				}
 				
 				$urls[ $url ] = $device;
 				$urlsClone[]  = $url;
 			}
 			
-			$results = array();
+			$results = [];
 			// make sure the rolling window isn't greater than the # of urls
-			$rolling_window = 5;
+			$rolling_window = 2;
 			$rolling_window = ( sizeof( $urls ) < $rolling_window ) ? sizeof( $urls ) : $rolling_window;
 			$master         = curl_multi_init();
 			// $curl_arr = array();
 			// add additional curl options here
-			$options = array(
-				CURLOPT_FOLLOWLOCATION => FALSE,
-				CURLOPT_RETURNTRANSFER => TRUE,
-				CURLOPT_CONNECTTIMEOUT => 2,
-				CURLOPT_TIMEOUT        => 5,
-			);
+			$options = [
+				CURLOPT_FOLLOWLOCATION => 0,
+				CURLOPT_RETURNTRANSFER => 1,
+				//				CURLOPT_NOSIGNAL       => 1,
+				//				CURLOPT_HEADER         => 0,
+				//				CURLOPT_HTTPHEADER     => [
+				//					'Content-Type: application/json',
+				//					'Accept: application/json',
+				//				],
+				//				CURLOPT_CONNECTTIMEOUT => 5,
+				CURLOPT_TIMEOUT        => 8,
+				CURLOPT_ENCODING       => '',
+			];
 			// start the first batch of requests
 			
 			for ( $i = 0; $i < $rolling_window; $i++ ) {
@@ -474,19 +481,30 @@
 			$i--;
 			
 			do {
-				while ( ( $execrun = curl_multi_exec( $master, $running ) ) == CURLM_CALL_MULTI_PERFORM ) {
-					;
-				}
-				if ( $execrun != CURLM_OK ) {
+				do {
+					$mh_status = curl_multi_exec( $master, $running );
+				} while ( $mh_status == CURLM_CALL_MULTI_PERFORM );
+				if ( $mh_status != CURLM_OK ) {
 					break;
 				}
+				
 				// a request was just completed -- find out which one
 				while ( $done = curl_multi_info_read( $master ) ) {
 					$info   = curl_getinfo( $done[ 'handle' ] );
 					$output = curl_multi_getcontent( $done[ 'handle' ] );
 					$device = $urls[ $info[ 'url' ] ];
 					
-					if ( !$output ) {
+					//					if ( curl_errno( $done[ 'handle' ] ) !== 0
+					//					     || intval( $info[ 'http_code' ] ) !== 200 ) { //if server responded with http error
+					//						var_dump( $info );
+					//						var_dump( curl_errno( $done[ 'handle' ] ) );
+					//						var_dump( curl_error( $done[ 'handle' ] ) );
+					//						var_dump( $done[ 'handle' ] );
+					//
+					//						die();
+					//					}
+					
+					if ( !$output || $output == "" ) {
 						$data        = new stdClass();
 						$data->ERROR = __( "CURL_ERROR" )." => ".curl_errno( $done[ 'handle' ] ).": ".curl_error(
 								$done[ 'handle' ]
@@ -552,12 +570,12 @@
 			$master         = curl_multi_init();
 			// $curl_arr = array();
 			// add additional curl options here
-			$options = array(
+			$options = [
 				CURLOPT_FOLLOWLOCATION => FALSE,
 				CURLOPT_RETURNTRANSFER => TRUE,
 				CURLOPT_CONNECTTIMEOUT => 5,
 				CURLOPT_TIMEOUT        => 8,
-			);
+			];
 			// start the first batch of requests
 			
 			for ( $i = 0; $i < $rolling_window; $i++ ) {
@@ -624,6 +642,5 @@
 			return $result;
 		}
 	}
-	
-	
-	
+
+

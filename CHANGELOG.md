@@ -1,6 +1,55 @@
 # CHANGELOG   
+
+## 2018-05-07
+- at more columns to device list (visible if 'show more' selected) 
+  - Topic and GroupTopic of the device (MQTT)
+  - OtaUrl (if case happens that device specific implementation)
+- Change Device Settings SSId for 5.13.1 (the AP is now visible)
    
+## 2018-05-06
+- add distance sensor data (#89)
+- fix overlapping sensor data on startpage (#90)
+- fix device list some values did not get updated after timeout
+- autoscan: remember fromIP and toIP (saved in MyConfig.php now) (#67)
    
+## 2018-04-10
+- dont hide device infos on error/timout in list
+  - the switch will be displayed in red on error (but stay on last known state)
+- add 8 sec refreshtime option to settings   
+   
+## 2018-04-06
+- adjust background of sensor data in daymode
+   
+## 2018-03-30
+- rollback to ajax status requests on device list
+  - multicurl was timeouting alot :/
+- fix skip minimal if no minimal firmware was uploaded
+   
+## 2018-03-25
+- fix for some line-height
+   
+## 2018-03-23
+- fix #83 (json changed for sensors)
+- add BME280 sensor
+- fix  #82, json friendlyname is now an array since 5.12.0h
+- some startpage responsive css fixes for sensor data
+- add 2x DS18x20 sensor
+   
+## 2018-03-03
+- fix nightmode always
+- startpage red border on error not shown when nightmode active fix
+- some timeout adjustment
+   
+## 2018-02-27
+- add coming HU firmware support for automode
+- FR translation   
+   
+## 2018-02-22
+- minor fix for startpage
+   
+## 2018-02-21
+- fix uptime for safari   
+- set timeout from 2 to 3 secs   
    
 ## 2018-02-19
 - add NL translation

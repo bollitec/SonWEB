@@ -122,8 +122,8 @@ function notifyMe( msg, title ) {
 	
 	// Let's check if the browser supports notifications
 	if ( !(
-			"Notification" in window
-		) ) {
+		"Notification" in window
+	) ) {
 		return;
 	}
 	
@@ -193,10 +193,10 @@ var parseVersion = function ( versionString ) {
 			last,
 			(
 				last.charCodeAt( 0 ) - 97 < 10
-					? "0" + (
+				? "0" + (
 					last.charCodeAt( 0 ) - 97
 				)
-					: last.charCodeAt( 0 ) - 97
+				: last.charCodeAt( 0 ) - 97
 			)
 		);
 	} else {
@@ -219,6 +219,18 @@ function getTemp( data ) {
 			           data.StatusSNS.DS18B20.Temperature + "°" + data.StatusSNS.TempUnit
 		           ) );
 	}
+	if ( data.StatusSNS.DS18x20 !== undefined ) {
+		if ( data.StatusSNS.DS18x20.DS1 !== undefined ) {
+			temp.push( (
+				           data.StatusSNS.DS18x20.DS1.Temperature + "°" + data.StatusSNS.TempUnit
+			           ) );
+		}
+		if ( data.StatusSNS.DS18x20.DS2 !== undefined ) {
+			temp.push( (
+				           data.StatusSNS.DS18x20.DS2.Temperature + "°" + data.StatusSNS.TempUnit
+			           ) );
+		}
+	}
 	if ( data.StatusSNS.DHT11 !== undefined ) {
 		temp.push( (
 			           data.StatusSNS.DHT11.Temperature + "°" + data.StatusSNS.TempUnit
@@ -234,9 +246,19 @@ function getTemp( data ) {
 			           data.StatusSNS.SHT3X.Temperature + "°" + data.StatusSNS.TempUnit
 		           ) );
 	}
+	if ( data.StatusSNS[ "SHT3X-0x45" ] !== undefined ) {
+		temp.push( (
+			           data.StatusSNS[ "SHT3X-0x45" ].Temperature + "°" + data.StatusSNS.TempUnit
+		           ) );
+	}
 	if ( data.StatusSNS.BMP280 !== undefined ) {
 		temp.push( (
 			           data.StatusSNS.BMP280.Temperature + "°" + data.StatusSNS.TempUnit
+		           ) );
+	}
+	if ( data.StatusSNS.BME280 !== undefined ) {
+		temp.push( (
+			           data.StatusSNS.BME280.Temperature + "°" + data.StatusSNS.TempUnit
 		           ) );
 	}
 	if ( data.StatusSNS.SI7021 !== undefined ) {
@@ -263,6 +285,11 @@ function getHumidity( data ) {
 			humi.push( data.StatusSNS.AM2301.Humidity + "%" );
 		}
 	}
+	if ( data.StatusSNS.BME280 !== undefined ) {
+		if ( data.StatusSNS.BME280.Humidity !== undefined ) {
+			humi.push( data.StatusSNS.BME280.Humidity + "%" );
+		}
+	}
 	if ( data.StatusSNS.DHT11 !== undefined ) {
 		if ( data.StatusSNS.DHT11.Humidity !== undefined ) {
 			humi.push( data.StatusSNS.DHT11.Humidity + "%" );
@@ -271,6 +298,11 @@ function getHumidity( data ) {
 	if ( data.StatusSNS.SHT3X !== undefined ) {
 		if ( data.StatusSNS.SHT3X.Humidity !== undefined ) {
 			humi.push( data.StatusSNS.SHT3X.Humidity + "%" );
+		}
+	}
+	if ( data.StatusSNS[ "SHT3X-0x45" ] !== undefined ) {
+		if ( data.StatusSNS[ "SHT3X-0x45" ].Humidity !== undefined ) {
+			humi.push( data.StatusSNS[ "SHT3X-0x45" ].Humidity + "%" );
 		}
 	}
 	if ( data.StatusSNS.SI7021 !== undefined ) {
@@ -292,6 +324,11 @@ function getHumidity( data ) {
 function getPressure( data ) {
 	var press = [];
 	
+	if ( data.StatusSNS.BME280 !== undefined ) {
+		if ( data.StatusSNS.BME280.Pressure !== undefined ) {
+			press.push( data.StatusSNS.BME280.Pressure + "&nbsp;hPa" );
+		}
+	}
 	if ( data.StatusSNS.BMP280 !== undefined ) {
 		if ( data.StatusSNS.BMP280.Pressure !== undefined ) {
 			press.push( data.StatusSNS.BMP280.Pressure + "&nbsp;hPa" );
@@ -301,6 +338,20 @@ function getPressure( data ) {
 	//console.log( press );
 	
 	return press.join( "<br/>" );
+}
+
+function getDistance( data ) {
+	var dist = [];
+	
+	if ( data.StatusSNS.SR04 !== undefined ) {
+		if ( data.StatusSNS.SR04.Distance !== undefined ) {
+			dist.push( data.StatusSNS.SR04.Distance + "cm" ); //TODO: edit unit #89
+		}
+	}
+	
+	//console.log( press );
+	
+	return dist.join( "<br/>" );
 }
 
 
@@ -316,13 +367,13 @@ function checkNightmode( config ) {
 	if ( config === "disable" ) {
 		$( "body" ).removeClass( "nightmode" );
 	} else {
-		if ( "auto" ) {
+		if ( config === "auto" ) {
 			if ( hour >= 18 || hour <= 8 ) {
 				$( "body" ).addClass( "nightmode" );
 			} else {
 				$( "body" ).removeClass( "nightmode" );
 			}
-		} else if ( config === "enable" ) {
+		} else if ( config === "always" ) {
 			$( "body" ).addClass( "nightmode" );
 		}
 	}
@@ -330,5 +381,47 @@ function checkNightmode( config ) {
 
 Date.prototype.addHours = function ( h ) {
 	this.setHours( this.getHours() + h );
+	return this;
+};
+
+
+jQuery.fn.shake = function ( intShakes, intDistance, intDuration ) {
+	this.each( function () {
+		$( this ).css( "position", "relative" );
+		for ( var x = 1; x <= intShakes; x++ ) {
+			$( this ).animate(
+				{
+					left: (
+						intDistance * -1
+					),
+				},
+				(
+					(
+						(
+						intDuration / intShakes
+						) / 4
+					)
+				)
+			)
+			         .animate(
+				         { left: intDistance },
+				         (
+					         (
+					         intDuration / intShakes
+					         ) / 2
+				         )
+			         )
+			         .animate(
+				         { left: 0 },
+				         (
+					         (
+						         (
+						         intDuration / intShakes
+						         ) / 4
+					         )
+				         )
+			         );
+		}
+	} );
 	return this;
 };

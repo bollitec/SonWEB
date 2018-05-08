@@ -27,13 +27,12 @@
 	}
 	
 	$config = $Config->readAll();
-	unset( $config[ "password" ] )
 
 ?>
 
 
 <div class='row justify-content-sm-center'>
-	<div class='col-12 col-md-6 col-xl-4'>
+	<div class='col-12 col-md-8 col-xl-6'>
 		<h2 class='text-sm-center mb-5'>
 			<?php echo $title; ?>
 		</h2>
@@ -67,7 +66,6 @@
 				       placeholder="<?php echo __( "PLEASE_ENTER" ); ?>"
 				       value='<?php echo $config[ "username" ]; ?>'
 				>
-			
 			</div>
 			<div class="form-group">
 				<label for="password">
@@ -92,7 +90,9 @@
 				       placeholder="<?php echo __( "PLEASE_ENTER" ); ?>"
 				       value='<?php echo $config[ "ota_server_ip" ]; ?>'
 				>
-			
+				<small id="from_ipHelp" class="form-text text-muted">
+					<?php echo __( "CONFIG_SERVER_IP_HELP", "USER_CONFIG" ); ?>
+				</small>
 			</div>
 			<div class="form-group">
 				<label for="update_automatic_lang">
@@ -137,6 +137,12 @@
 							"CONFIG_AUTOMATIC_LANGAUGE_FR",
 							"USER_CONFIG"
 						); ?>
+					</option>
+					<option value='HU' <?php echo $config[ "update_automatic_lang" ] == "HU" ? "selected=\selected\""
+						: ""; ?>><?php echo __(
+							"CONFIG_AUTOMATIC_LANGAUGE_HU",
+							"USER_CONFIG"
+						); ?> (next release version!)
 					</option>
 					<option value='IT' <?php echo $config[ "update_automatic_lang" ] == "IT" ? "selected=\selected\""
 						: ""; ?>><?php echo __(
@@ -185,6 +191,9 @@
 					<option value='5' <?php echo $config[ "refreshtime" ] == "5" ? "selected=\selected\"" : ""; ?> >
 						5 <?php echo __( "CONFIG_REFRESHTIME_SECONDS", "USER_CONFIG" ); ?>
 					</option>
+					<option value='8' <?php echo $config[ "refreshtime" ] == "8" ? "selected=\selected\"" : ""; ?> >
+						8 <?php echo __( "CONFIG_REFRESHTIME_SECONDS", "USER_CONFIG" ); ?>
+					</option>
 					<option value='10' <?php echo $config[ "refreshtime" ] == "10" ? "selected=\selected\"" : ""; ?> >
 						10 <?php echo __( "CONFIG_REFRESHTIME_SECONDS", "USER_CONFIG" ); ?>
 					</option>
@@ -204,17 +213,18 @@
 					<?php echo __( "CONFIG_NIGHTMODE", "USER_CONFIG" ); ?>
 				</label>
 				<select class="form-control custom-select" id="nightmode" name='nightmode'>
-					<option value='disable' <?php echo $config[ "nightmode" ] == "disable" ? "selected=\selected\""
+					<option value='disable' <?php echo $config[ "nightmode" ] == "disable" ? "selected=\"selected\""
 						: ""; ?>><?php echo __(
 							"CONFIG_NIGHTMODE_DISABLE",
 							"USER_CONFIG"
 						); ?>
 					</option>
-					<option value='always' <?php echo $config[ "nightmode" ] == "always" ? "selected=\selected\""
+					<option value='always' <?php echo $config[ "nightmode" ] == "always" ? "selected=\"selected\""
 						: ""; ?> >
 						<?php echo __( "CONFIG_NIGHTMODE_ALWAYS", "USER_CONFIG" ); ?>
 					</option>
-					<option value='auto' <?php echo $config[ "nightmode" ] == "auto" ? "selected=\selected\"" : ""; ?> >
+					<option value='auto' <?php echo $config[ "nightmode" ] == "auto" ? "selected=\"selected\""
+						: ""; ?> >
 						<?php echo __( "CONFIG_NIGHTMODE_AUTO", "USER_CONFIG" ); ?>
 					</option>
 				</select>

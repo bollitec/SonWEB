@@ -13,6 +13,8 @@
 				"update_automatic_lang" => "",
 				"nightmode"             => "auto",
 				"login"                 => "1",
+				"scan_from_ip"          => "192.168.178.2",
+				"scan_to_ip"            => "192.168.178.254",
 			];
 		
 		function __construct() {
@@ -26,8 +28,7 @@
 				);
 				$config = $this->defaultConfigs;
 				
-				$config[ "ota_server_ip" ] = __( "DEFAULT_HOST_IP_PLACEHOLDER", "USER_CONFIG" );
-				$config                    = var_export( $config, TRUE );
+				$config = var_export( $config, TRUE );
 				if ( !fwrite( $fh, "<?php return $config ; ?>" ) ) {
 					die( "COULD NOT CREATE OR WRITE IN CONFIG FILE" );
 				}
@@ -44,10 +45,13 @@
 			
 		}
 		
-		public function readAll() {
+		public function readAll( $inclPassword = FALSE ) {
 			$config = include $this->cfgFile;
 			if ( $config === 1 ) { //its empty
 				return [];
+			}
+			if ( !$inclPassword ) {
+				unset( $config[ "password" ] );
 			}
 			
 			return $config;

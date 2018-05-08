@@ -39,13 +39,13 @@ function updateStatus() {
 				                       && !data.ERROR
 				                       && !data.WARNING
 				                       && data
-				                          !== ""
+				                       !== ""
 				                       && data
-				                          !== undefined
+				                       !== undefined
 				                       && data.statusText
-				                          === undefined ) {
+				                       === undefined ) {
 					
-					                  if ( device_group == "multi" ) {
+					                  if ( device_group === "multi" ) {
 						                  $( '#content .box_device[data-device_group="multi"][data-device_ip="' + device_ip + '"]' )
 							                  .each( function ( key, groupbox ) {
 								                  var img           = $( groupbox ).find( "img" );
@@ -106,9 +106,9 @@ function deviceTools() {
 		if ( $( this ).hasClass( "toggled" ) ) {
 			return;
 		}
-		$( '#content .box_device' ).addClass( "toggled" );
+		$( this ).addClass( "toggled" );
 		var device_box = $( this );
-		device_box.find( "img" ).effect( "shake", { distance: 3 } );
+		device_box.find( "img" ).shake( 3, 5, 500 );
 		var device_ip     = device_box.data( "device_ip" );
 		var device_id     = device_box.data( "device_id" );
 		var device_relais = device_box.data( "device_relais" );
@@ -177,6 +177,13 @@ function updateBox( row, data, device_status ) {
 		infoBoxCounter++;
 	}
 	
+	var distance = getDistance( data );
+	
+	if ( distance != "" ) {
+		$( row ).find( ".info-" + infoBoxCounter + " span" ).html( distance ).parent().removeClass( "hidden" );
+		infoBoxCounter++;
+	}
+	
 	
 	var idx = (
 		data.idx ? data.idx : ""
@@ -203,8 +210,8 @@ function updateBox( row, data, device_status ) {
 	$( row ).find( ".mqtt span" ).html( data.StatusMQT !== undefined ? "1" : "0" );
 	$( row ).find( ".poweronstate span" ).html( data.Status.PowerOnState
 	                                            !== undefined
-		                                            ? data.Status.PowerOnState
-		                                            : "?" );
+	                                            ? data.Status.PowerOnState
+	                                            : "?" );
 	$( row ).find( ".ledstate span" ).html( data.Status.LedState !== undefined ? data.Status.LedState : "?" );
 	$( row ).find( ".savedata span" ).html( data.Status.SaveData !== undefined ? data.Status.SaveData : "?" );
 	$( row ).find( ".sleep span" ).html( data.StatusPRM.Sleep !== undefined ? data.StatusPRM.Sleep + "ms" : "?" );
@@ -223,8 +230,8 @@ function updateBox( row, data, device_status ) {
 	                                   ) );
 	$( row ).find( ".wificonfig span" ).html( data.StatusNET.WifiConfig
 	                                          !== undefined
-		                                          ? data.StatusNET.WifiConfig
-		                                          : "?" );
+	                                          ? data.StatusNET.WifiConfig
+	                                          : "?" );
 	$( row ).find( ".vcc span" ).html( data.StatusSTS.Vcc !== undefined ? data.StatusSTS.Vcc + "V" : "?" );
 	
 	
