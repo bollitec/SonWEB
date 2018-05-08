@@ -19,11 +19,18 @@ You can find it here: [SonWEB GitHub](https://github.com/reloxx13/SonWEB)
 ### Windows
 I provide a ready2use ZIP on the releases page with XAMPP
 
-### Unix
+### Unix Linux (e.g. Raspi Jessie)
 * A Webserver 
   * recommend apache2
   * recommend php7 (works with php5, too)
   * php-curl php-zip Modules installed
+* Link to update Raspi Jessie with Apache2 to PHP7.0 
+  * if planned to use nginx, ignore this session in the instructions, be aware follow the output in console
+  * https://electrodrome.net/debian-8-jessie-php-7-0-und-nginx-auf-dem-raspberry-pi-installieren-und-einrichten/
+* Link to install the service without new webserver implementation on Raspi
+  * the example is on ubuntu but works well for raspi, be aware follow the output in console
+  * https://github.com/reloxx13/SonWEB/wiki/Guide-for-Ubuntu-Server-16.04
+
 
 ### Docker
 SonWEB is available in a docker image: [raymondmm/sonoff-docker](https://hub.docker.com/r/raymondmm/sonweb/), which is a Linux Alpine (3.7) based image with Apache2 and Php7 installed and supports **arm** (i.e. Raspberry PI3) and **amd64** (i.e. Synology DSM). Check out the [Wiki for running SonWEB in a Docker Container](https://github.com/RaymondMouthaan/sonweb-docker/wiki) for install instructions.
