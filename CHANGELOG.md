@@ -1,5 +1,9 @@
 # CHANGELOG   
-   
+
+## 2018-05-07
+- at more columns to device list (visible if 'show more' selected) 
+  - Topic and GroupTopic of the device (MQTT)
+  - OtaUrl (if case happens that device specific implementation)  
    
 ## 2018-05-06
 - add distance sensor data (#89)
