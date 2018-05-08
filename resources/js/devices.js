@@ -533,7 +533,24 @@ function updateRow( row, data, device_status ) {
 		                                        ? data.StatusNET.Hostname
 		                                        : "?" );
 	}
-	
+	if ( !$( row ).find( ".topic span" ).hasClass( "dont-update" ) ) {
+		$( row ).find( ".topic span" ).html( data.Status.Topic
+		                                        !== undefined
+		                                        ? data.Status.Topic
+		                                        : "?" );
+	}
+	if ( !$( row ).find( ".grouptopic span" ).hasClass( "dont-update" ) ) {
+		$( row ).find( ".grouptopic span" ).html( data.StatusPRM.GroupTopic
+		                                        !== undefined
+		                                        ? data.StatusPRM.GroupTopic
+		                                        : "?" );
+	}
+	if ( !$( row ).find( ".otaurl span" ).hasClass( "dont-update" ) ) {
+		$( row ).find( ".otaurl span" ).html( data.StatusPRM.OtaUrl
+		                                        !== undefined
+		                                        ? data.StatusPRM.OtaUrl
+		                                        : "?" );
+	}
 	if ( !$( row ).find( ".mac span" ).hasClass( "dont-update" ) ) {
 		$( row ).find( ".mac span" ).html( data.StatusNET.Mac !== undefined ? data.StatusNET.Mac : "?" );
 	}
