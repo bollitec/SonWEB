@@ -24,7 +24,7 @@ I provide a ready2use ZIP on the releases page with XAMPP
   * recommend apache2
   * recommend php7 (works with php5, too)
   * php-curl php-zip Modules installed
-* Link to update Raspi Jessie with Apache2 to PHP7.0 
+* Link to update Raspi Jessie with Apache2 to PHP7.0 (not important, should also run at PHP5)
   * if planned to use nginx, ignore this session in the instructions, be aware follow the output in console
   * https://electrodrome.net/debian-8-jessie-php-7-0-und-nginx-auf-dem-raspberry-pi-installieren-und-einrichten/
 * Link to install the service without new webserver implementation on Raspi
